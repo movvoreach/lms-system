@@ -52,7 +52,7 @@
                     style="object-fit:cover;">
 
                 <span class="ml-1">
-                    {{ Auth::user()->name ?? 'ម៉ូវ វរាជ' }}
+                    {{ Auth::user()->username ?? 'User' }}
                 </span>
 
                 <i class="fas fa-chevron-down text-xs ml-2"></i>
@@ -63,7 +63,7 @@
                 <div class="dropdown-item text-center bg-primary text-white">
                     <strong>Users</strong><br>
                     <small>
-                        No Roles
+                        {{ Auth::user()?->roles?->pluck('role_name')->join(', ') ?: 'No Roles' }}
                     </small>
                 </div>
 
@@ -80,7 +80,7 @@
                     Logout
                 </a>
 
-                <form id="logout-form" action="" method="POST" class="d-none">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf
                 </form>
 

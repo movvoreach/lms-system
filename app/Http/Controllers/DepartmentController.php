@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreDepartmentRequest;
-use App\Http\Requests\UpdateDepartmentRequest;
+use App\Http\Requests\DepartmentRequest\StoreDepartmentRequest;
+use App\Http\Requests\DepartmentRequest\UpdateDepartmentRequest;
 use App\Models\Faculty;
 use App\Services\DepartmentService;
-use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {

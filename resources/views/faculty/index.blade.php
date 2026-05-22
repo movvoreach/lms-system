@@ -8,12 +8,12 @@
 
     <style>
         /* ===== TABLE FIX ===== */
-        #departmentTable {
+        #facultyTable {
             width: 100% !important;
             table-layout: fixed;
         }
 
-        #departmentTable td {
+        #facultyTable td {
             word-break: break-word;
             white-space: normal;
         }
@@ -66,7 +66,7 @@
                 {{-- ✅ RESPONSIVE WRAPPER --}}
                 <div class="table-responsive">
 
-                    <table id="departmentTable" class="table table-bordered table-striped w-100">
+                    <table id="facultyTable" class="table table-bordered table-striped w-100">
 
                         <thead>
                             <tr>
@@ -94,7 +94,7 @@
 
                                         <button class="btn btn-danger btn-sm deleteBtn"
                                             data-id="{{ $faculty->faculty_id }}"
-                                            data-name="{{ $faculty->faculty_id }}">
+                                            data-name="{{ $faculty->faculty_name }}">
                                             Delete
                                         </button>
                                     </td>
@@ -118,14 +118,14 @@
                     <div class="modal-content">
 
                         <div class="modal-header bg-danger text-white">
-                            <h5 class="modal-title">Delete Fuculty</h5>
+                            <h5 class="modal-title">Delete Faculty</h5>
                             <button type="button" class="close text-white" data-dismiss="modal">
                                 &times;
                             </button>
                         </div>
 
                         <div class="modal-body">
-                            Are you sure delete <b id="deptName"></b>?
+                            Are you sure delete <b id="facultyName"></b>?
                         </div>
 
                         <div class="modal-footer">
@@ -154,13 +154,18 @@
             $(document).ready(function() {
 
                 // ✅ FIXED DATATABLE (SEARCH + RESPONSIVE + WIDTH)
-                $('#departmentTable').DataTable({
+                $('#facultyTable').DataTable({
                     responsive: true,
                     autoWidth: false,
                     pageLength: 10,
                     order: [
                         [0, 'asc']
                     ],
+                    columnDefs: [{
+                        targets: -1,
+                        orderable: false,
+                        searchable: false
+                    }],
                     language: {
                         search: "ស្វែងរក:",
                         lengthMenu: "បង្ហាញ _MENU_ ទិន្នន័យ",
@@ -174,13 +179,13 @@
                 });
 
                 // ✅ DELETE MODAL
-                $('.deleteBtn').on('click', function() {
+                $(document).on('click', '.deleteBtn', function() {
 
                     let id = $(this).data('id');
                     let name = $(this).data('name');
 
-                    $('#deptName').text(name);
-                    $('#deleteForm').attr('action', '/admin/departments/' + id);
+                    $('#facultyName').text(name);
+                    $('#deleteForm').attr('action', '/admin/faculty/' + id);
 
                     $('#deleteModal').modal('show');
                 });

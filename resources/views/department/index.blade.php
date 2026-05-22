@@ -174,6 +174,11 @@
                     order: [
                         [0, 'asc']
                     ],
+                    columnDefs: [{
+                        targets: -1,
+                        orderable: false,
+                        searchable: false
+                    }],
                     language: {
                         search: "ស្វែងរក:",
                         lengthMenu: "បង្ហាញ _MENU_ ទិន្នន័យ",
@@ -187,7 +192,7 @@
                 });
 
                 // ✅ DELETE MODAL
-                $('.deleteBtn').on('click', function() {
+                $(document).on('click', '.deleteBtn', function() {
 
                     let id = $(this).data('id');
                     let name = $(this).data('name');

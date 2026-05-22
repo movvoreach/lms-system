@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Department extends Model
 {
@@ -22,5 +23,10 @@ class Department extends Model
     public function faculty(): BelongsTo
     {
         return $this->belongsTo(Faculty::class, 'faculty_id', 'faculty_id');
+    }
+
+    public function courses(): HasMany
+    {
+        return $this->hasMany(Course::class, 'department_id', 'department_id');
     }
 }

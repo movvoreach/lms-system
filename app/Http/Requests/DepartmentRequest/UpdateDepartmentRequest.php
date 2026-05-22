@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\DepartmentRequest;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -14,7 +14,7 @@ class UpdateDepartmentRequest extends FormRequest
 
     public function rules(): array
     {
-        $department = $this->route('department');
+        $department = $this->route('id');
         $departmentId = is_object($department) ? $department->getKey() : $department;
 
         return [

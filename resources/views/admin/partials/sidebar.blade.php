@@ -17,7 +17,7 @@
                             class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Welcome : {{ Auth::user()->name ?? 'User' }}</a>
+                        <a href="#" class="d-block">Welcome : {{ Auth::user()->username ?? 'User' }}</a>
                     </div>
                 </div>
 
@@ -54,30 +54,60 @@
                     </a>
                 </li>
 
-                {{-- Programs --}}
-                <li class="nav-item has-treeview {{ request()->is('course*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ request()->is('course*') ? 'active' : '' }}">
+                {{-- Academic Years --}}
+                <li class="nav-item has-treeview {{ request()->is('admin/academic-years*') ? 'menu-open' : '' }}">
+                    <a href="{{ route('admin.academic-years.index') }}"
+                        class="nav-link {{ request()->is('admin/academic-years*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-calendar"></i>
+                        <p>
+                            Academic Years
+                        </p>
+                    </a>
+                </li>
+
+                {{-- Semesters --}}
+                <li class="nav-item has-treeview {{ request()->is('admin/semesters*') ? 'menu-open' : '' }}">
+                    <a href="{{ route('admin.semesters.index') }}"
+                        class="nav-link {{ request()->is('admin/semesters*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-calendar-alt"></i>
+                        <p>
+                            Semesters
+                        </p>
+                    </a>
+                </li>
+
+                {{-- Courses --}}
+                <li class="nav-item has-treeview {{ request()->is('admin/courses*') || request()->is('admin/course-categories*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ request()->is('admin/courses*') || request()->is('admin/course-categories*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-graduation-cap"></i>
                         <p>
-                            Course Manage
+                            គ្រប់គ្រង Course
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
 
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#"
-                                class="nav-link {{ request()->routeIs('course.create') ? 'active' : '' }}">
+                            <a href="{{ route('admin.course-categories.index') }}"
+                                class="nav-link {{ request()->routeIs('admin.course-categories.*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Create Course</p>
+                                <p>ប្រភេទ Course</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a href="#"
-                                class="nav-link {{ request()->routeIs('course.index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.courses.create') }}"
+                                class="nav-link {{ request()->routeIs('admin.courses.create') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Course List</p>
+                                <p>បង្កើត Course</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('admin.courses.index') }}"
+                                class="nav-link {{ request()->routeIs('admin.courses.index') || request()->routeIs('admin.courses.edit') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>បញ្ជី Course</p>
                             </a>
                         </li>
                     </ul>
@@ -156,6 +186,17 @@
                 </li>
 
                 <li class="nav-header text-uppercase">People Management</li>
+
+                {{-- Users --}}
+                <li class="nav-item has-treeview {{ request()->is('admin/users*') ? 'menu-open' : '' }}">
+                    <a href="{{ route('admin.users.index') }}"
+                        class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-users-cog"></i>
+                        <p>
+                            អ្នកប្រើ និងតួនាទី
+                        </p>
+                    </a>
+                </li>
 
                 {{-- Faculty Members --}}
                 <li class="nav-item has-treeview {{ request()->is('teacher*') ? 'menu-open' : '' }}">
