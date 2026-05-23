@@ -16,6 +16,7 @@ class AcademicYear extends Model
         'year_label',
         'start_date',
         'end_date',
+        'status',
     ];
 
     protected $casts = [
@@ -26,5 +27,10 @@ class AcademicYear extends Model
     public function semesters(): HasMany
     {
         return $this->hasMany(Semester::class, 'academic_year_id', 'academic_year_id');
+    }
+
+    public function studentRecords(): HasMany
+    {
+        return $this->hasMany(StudentAcademicYearRecord::class, 'academic_year_id', 'academic_year_id');
     }
 }

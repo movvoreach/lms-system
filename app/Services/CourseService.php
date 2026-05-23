@@ -14,7 +14,7 @@ class CourseService
     public function getAll(): Collection
     {
         return Course::query()
-            ->with(['category', 'department'])
+            ->with(['category', 'department', 'semester.academicYear'])
             ->latest('id')
             ->get();
     }

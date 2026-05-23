@@ -34,7 +34,7 @@
                 @csrf
 
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Year Label <span class="text-danger">*</span></label>
                             <input type="text" name="year_label"
@@ -50,7 +50,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Start Date <span class="text-danger">*</span></label>
                             <input type="date" name="start_date"
@@ -64,7 +64,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>End Date <span class="text-danger">*</span></label>
                             <input type="date" name="end_date"
@@ -73,6 +73,20 @@
                                 required>
 
                             @error('end_date')
+                                <span class="invalid-feedback d-block">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Status <span class="text-danger">*</span></label>
+                            <select name="status" class="form-control custom-select @error('status') is-invalid @enderror" required>
+                                @foreach (['active' => 'Active', 'closed' => 'Closed', 'archived' => 'Archived'] as $value => $label)
+                                    <option value="{{ $value }}" @selected(old('status', 'active') === $value)>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            @error('status')
                                 <span class="invalid-feedback d-block">{{ $message }}</span>
                             @enderror
                         </div>

@@ -1,172 +1,161 @@
 @extends('admin.layouts.master')
 
-@section('title', 'User Profile')
+@section('title', 'Profile Settings | LMS')
 
 @push('styles')
     <style>
-        .card-title {
-            font-weight: 600;
-        }
-
-        .profile-image {
-            width: 140px;
-            height: 140px;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 1px solid #ddd;
-            background: #f8f9fa;
-        }
-
-        .info-label {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .info-value {
-            color: #555;
-        }
-
-        .profile-box {
-            border: 1px solid #eee;
+        .security-state {
+            border: 1px solid #e7e9ef;
             border-radius: 8px;
-            padding: 15px;
+            padding: 18px;
             background: #fff;
-            margin-bottom: 15px;
+        }
+
+        .security-icon {
+            width: 52px;
+            height: 52px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 24px;
+        }
+
+        .security-icon.enabled {
+            color: #0f5132;
+            background: #d1e7dd;
+        }
+
+        .security-icon.disabled {
+            color: #842029;
+            background: #f8d7da;
+        }
+
+        .custom-switch .custom-control-label {
+            cursor: pointer;
+            font-weight: 600;
         }
     </style>
 @endpush
 
+@section('page-title')
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1>Profile Settings</h1>
+        </div>
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active">Profile</li>
+            </ol>
+        </div>
+    </div>
+@endsection
+
 @section('content')
-
-    <div class="row mt-5">
-        <div class="col-12">
-            <div class="page-header mt-2">
-                <h2 class="pageheader-title">User Profile</h2>
-                <hr>
-                <nav>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="/dashboard">Home</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('teacher.index') }}">Teacher List</a>
-                        </li>
-                        <li class="breadcrumb-item active">
-                            User Profile
-                        </li>
-                    </ol>
-                </nav>
-            </div>
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle mr-1"></i>
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
-    </div>
+    @endif
 
-    <div class="card shadow-sm">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="card-title mb-0">Profile Information</h3>
-            <a href="{{ route('teacher.index') }}" class="btn btn-secondary btn-sm ml-auto">
-                <i class="fas fa-arrow-left"></i> Back
-            </a>
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle mr-1"></i>
+            {{ $errors->first() }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
+    @endif
 
-        <div class="card-body">
-            <div class="row">
-
-                {{-- Profile Image --}}
-                <div class="col-md-4 text-center mb-4">
-                    @if(!empty($user->teacher->profile_image))
-                        <img src="{{ asset('storage/' . $user->teacher->profile_image) }}" alt="Profile Image" class="profile-image">
-                    @else
-                        <img src="https://via.placeholder.com/140x140.png?text=No+Image" alt="No Image" class="profile-image">
-                    @endif
-
-                    <div class="mt-3">
-                        <h4 class="mb-1">{{ $user->name }}</h4>
-                        <p class="text-muted mb-0">Teacher</p>
-                    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img src="{{ asset('backend/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2 mb-3"
+                        width="96" height="96" alt="User avatar">
+                    <h4 class="mb-1">{{ $user->username }}</h4>
+                    <p class="text-muted mb-2">{{ $user->email }}</p>
+                    <span class="badge badge-{{ $user->is_active ? 'success' : 'secondary' }}">
+                        {{ $user->is_active ? 'Active' : 'Disabled' }}
+                    </span>
                 </div>
-
-                {{-- Profile Details --}}
-                <div class="col-md-8">
-                    <div class="row">
-
-                        <div class="col-md-6">
-                            <div class="profile-box">
-                                <div class="info-label">Teacher ID</div>
-                                <div class="info-value">{{ $user->teacher->teacher_id ?? '-' }}</div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="profile-box">
-                                <div class="info-label">Full Name</div>
-                                <div class="info-value">{{ $user->name ?? '-' }}</div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="profile-box">
-                                <div class="info-label">Email</div>
-                                <div class="info-value">{{ $user->email ?? '-' }}</div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="profile-box">
-                                <div class="info-label">Course</div>
-                                <div class="info-value">{{ $user->teacher->course ?? '-' }}</div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="profile-box">
-                                <div class="info-label">Experience</div>
-                                <div class="info-value">{{ $user->teacher->experience ?? '-' }}</div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="profile-box">
-                                <div class="info-label">Education</div>
-                                <div class="info-value">{{ $user->teacher->education ?? '-' }}</div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="profile-box">
-                                <div class="info-label">Skills</div>
-                                <div class="info-value">{{ $user->teacher->skills ?? '-' }}</div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="profile-box">
-                                <div class="info-label">Contact</div>
-                                <div class="info-value">{{ $user->teacher->contact ?? '-' }}</div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="profile-box">
-                                <div class="info-label">Note</div>
-                                <div class="info-value">{{ $user->teacher->note ?? '-' }}</div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
             </div>
         </div>
 
-        <div class="card-footer text-center">
-            <a href="{{ route('teacher.edit', $user->id) }}" class="btn btn-primary">
-                <i class="fas fa-edit"></i> Edit Profile
-            </a>
+        <div class="col-lg-8">
+            <div class="card" id="two-factor">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-user-shield mr-2"></i>
+                        Two-Factor Authentication
+                    </h3>
+                </div>
 
-            <a href="{{ route('teacher.index') }}" class="btn btn-danger">
-                Cancel
-            </a>
+                <div class="card-body">
+                    <div class="security-state mb-4">
+                        <div class="d-flex align-items-center">
+                            <div class="security-icon {{ $user->two_factor_enabled ? 'enabled' : 'disabled' }} mr-3">
+                                <i class="fas {{ $user->two_factor_enabled ? 'fa-shield-alt' : 'fa-shield-virus' }}"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1">
+                                    Email OTP is {{ $user->two_factor_enabled ? 'enabled' : 'disabled' }}
+                                </h5>
+                                <p class="text-muted mb-0">
+                                    When enabled, each login requires a 6-digit code sent to {{ $user->email }}.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form action="{{ route('profile.two-factor.update') }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+
+                        <input type="hidden" name="two_factor_enabled" value="0">
+
+                        <div class="custom-control custom-switch mb-4">
+                            <input type="checkbox" class="custom-control-input" id="twoFactorEnabled"
+                                name="two_factor_enabled" value="1" @checked(old('two_factor_enabled', $user->two_factor_enabled))>
+                            <label class="custom-control-label" for="twoFactorEnabled">
+                                Require email OTP after password login
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save mr-1"></i>
+                            Save Security Settings
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Account Details</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Username</dt>
+                        <dd class="col-sm-8">{{ $user->username }}</dd>
+
+                        <dt class="col-sm-4">Email</dt>
+                        <dd class="col-sm-8">{{ $user->email }}</dd>
+
+                        <dt class="col-sm-4">Roles</dt>
+                        <dd class="col-sm-8">{{ $user->roles->pluck('role_name')->join(', ') ?: 'No roles assigned' }}</dd>
+
+                        <dt class="col-sm-4">Last login</dt>
+                        <dd class="col-sm-8">{{ $user->last_login_at?->format('Y-m-d H:i') ?? 'Never' }}</dd>
+                    </dl>
+                </div>
+            </div>
         </div>
     </div>
-
 @endsection

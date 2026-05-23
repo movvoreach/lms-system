@@ -65,6 +65,17 @@
                     </a>
                 </li>
 
+                {{-- Academic Progression --}}
+                <li class="nav-item has-treeview {{ request()->is('admin/academic-progression*') ? 'menu-open' : '' }}">
+                    <a href="{{ route('admin.academic-progression.index') }}"
+                        class="nav-link {{ request()->is('admin/academic-progression*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-archive"></i>
+                        <p>
+                            Academic Progression
+                        </p>
+                    </a>
+                </li>
+
                 {{-- Semesters --}}
                 <li class="nav-item has-treeview {{ request()->is('admin/semesters*') ? 'menu-open' : '' }}">
                     <a href="{{ route('admin.semesters.index') }}"
@@ -113,77 +124,7 @@
                     </ul>
                 </li>
 
-                {{-- Subjects --}}
-                <li class="nav-item has-treeview {{ request()->is('admin/subjects*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ request()->is('admin/subjects*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-book"></i>
-                        <p>
-                            Subjects
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
 
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="#"
-                                class="nav-link {{ request()->routeIs('subject.create') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Create Subject</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#"
-                                class="nav-link {{ request()->routeIs('subject.index') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Subject List</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                {{-- Lesson Content --}}
-                <li class="nav-item has-treeview {{ request()->is('lessons*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ request()->is('lessons*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-file-alt"></i>
-                        <p>
-                            Lesson Content
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="#"
-                                class="nav-link {{ request()->routeIs('lessons.create') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Create Lesson</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#"
-                                class="nav-link {{ request()->routeIs('lessons.index') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Lesson List</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-door-open"></i>
-                        <p>Sections / Classes</p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-calendar-alt"></i>
-                        <p>Timetable</p>
-                    </a>
-                </li>
 
                 <li class="nav-header text-uppercase">People Management</li>
 
@@ -198,63 +139,25 @@
                     </a>
                 </li>
 
-                {{-- Faculty Members --}}
-                <li class="nav-item has-treeview {{ request()->is('teacher*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ request()->is('teacher*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-chalkboard-teacher"></i>
-                        <p>
-                            Faculty Members
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="#"
-                                class="nav-link {{ request()->routeIs('teacher.create') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Add Faculty</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#"
-                                class="nav-link {{ request()->routeIs('teacher.index') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Faculty List</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
                 {{-- Students --}}
-                <li class="nav-item has-treeview {{ request()->is('student*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ request()->is('student*') ? 'active' : '' }}">
+                <li class="nav-item has-treeview {{ request()->is('admin/students*') ? 'menu-open' : '' }}">
+                    <a href="{{ route('admin.students.index') }}"
+                        class="nav-link {{ request()->is('admin/students*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user-graduate"></i>
-                        <p>
-                            Students
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
+                        <p>Students</p>
                     </a>
-
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="#"
-                                class="nav-link {{ request()->routeIs('students.create') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Add Student</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#"
-                                class="nav-link {{ request()->routeIs('students.list') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Student List</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
+
+                {{-- Teachers --}}
+                <li class="nav-item has-treeview {{ request()->is('admin/teachers*') ? 'menu-open' : '' }}">
+                    <a href="{{ route('admin.teachers.index') }}"
+                        class="nav-link {{ request()->is('admin/teachers*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                        <p>Teachers</p>
+                    </a>
+                </li>
+
+
 
             </ul>
         </nav>

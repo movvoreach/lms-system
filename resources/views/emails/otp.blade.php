@@ -40,7 +40,7 @@
                     <tr>
                         <td style="padding:38px 40px 22px;">
                             <h1 style="margin:0 0 24px;font-size:20px;line-height:1.7;font-weight:700;color:#f5f7fb;">
-                                គោរពជូន លោក/លោកស្រី {{ $user->name }},
+                                គោរពជូន លោក/លោកស្រី {{ $user->username }},
                             </h1>
 
                             <p style="margin:0 0 28px;font-size:16px;line-height:1.9;color:#aeb4bf;">

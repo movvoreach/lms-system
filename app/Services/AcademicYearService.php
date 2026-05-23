@@ -14,7 +14,7 @@ class AcademicYearService
     public function getAll(): Collection
     {
         return AcademicYear::query()
-            ->withCount('semesters')
+            ->withCount(['semesters', 'studentRecords'])
             ->latest('academic_year_id')
             ->get();
     }
@@ -58,6 +58,10 @@ class AcademicYearService
         try {
             return DB::transaction(function () use ($id) {
                 $academicYear = $this->findById($id);
+
+                if ($academicYear->studentRecords()->exists()) {
+                    throw new RuntimeException('Academic year has historical student records. Archive it instead of deleting.');
+                }
 
                 return (bool) $academicYear->delete();
             });

@@ -28,6 +28,7 @@ class User extends Authenticatable
         'password',
         'is_active',
         'last_login_at',
+        'two_factor_enabled',
         'two_factor_code',
         'two_factor_expires_at',
     ];
@@ -54,6 +55,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'is_active' => 'boolean',
             'last_login_at' => 'datetime',
+            'two_factor_enabled' => 'boolean',
             'two_factor_expires_at' => 'datetime',
             'deleted_at' => 'datetime',
             'password' => 'hashed',

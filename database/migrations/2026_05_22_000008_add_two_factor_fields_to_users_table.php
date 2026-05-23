@@ -9,8 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
+            if (! Schema::hasColumn('users', 'two_factor_enabled')) {
+                $table->boolean('two_factor_enabled')->default(false)->after('last_login_at');
+            }
+
             if (! Schema::hasColumn('users', 'two_factor_code')) {
-                $table->string('two_factor_code')->nullable()->after('last_login_at');
+                $table->string('two_factor_code')->nullable()->after('two_factor_enabled');
             }
 
             if (! Schema::hasColumn('users', 'two_factor_expires_at')) {
@@ -24,6 +28,10 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             if (Schema::hasColumn('users', 'two_factor_code')) {
                 $table->dropColumn('two_factor_code');
+            }
+
+            if (Schema::hasColumn('users', 'two_factor_enabled')) {
+                $table->dropColumn('two_factor_enabled');
             }
 
             if (Schema::hasColumn('users', 'two_factor_expires_at')) {

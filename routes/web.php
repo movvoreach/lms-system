@@ -16,15 +16,21 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'two.factor'])->group(function () {
-Route::get('/', function () {
-    return view('admin.dashboard');
-})->name('admin.dashboard');
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
 
-require __DIR__ . '/academic/department.php';
-require __DIR__ . '/academic/fuculty.php';
-require __DIR__ . '/academic/academic_year.php';
-require __DIR__ . '/academic/semester.php';
-require __DIR__ . '/academic/course_category.php';
-require __DIR__ . '/academic/course.php';
-require __DIR__ . '/academic/user.php';
+    Route::get('/profile', [AuthController::class, 'profile'])->name('profile.show');
+    Route::patch('/profile/two-factor', [AuthController::class, 'updateTwoFactor'])->name('profile.two-factor.update');
+
+    require __DIR__ . '/academic/department.php';
+    require __DIR__ . '/academic/fuculty.php';
+    require __DIR__ . '/academic/academic_year.php';
+    require __DIR__ . '/academic/academic_progression.php';
+    require __DIR__ . '/academic/semester.php';
+    require __DIR__ . '/academic/course_category.php';
+    require __DIR__ . '/academic/course.php';
+    require __DIR__ . '/academic/user.php';
+    require __DIR__ . '/academic/student.php';
+    require __DIR__ . '/academic/teacher.php';
 });

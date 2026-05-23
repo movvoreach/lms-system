@@ -6,6 +6,7 @@ use App\Http\Requests\CourseRequest\StoreCourseRequest;
 use App\Http\Requests\CourseRequest\UpdateCourseRequest;
 use App\Models\CourseCategory;
 use App\Models\Department;
+use App\Models\Semester;
 use App\Services\CourseService;
 use Throwable;
 
@@ -27,8 +28,9 @@ class CourseController extends Controller
     {
         $courseCategories = CourseCategory::query()->orderBy('name')->get();
         $departments = Department::query()->orderBy('department_name')->get();
+        $semesters = Semester::query()->with('academicYear')->orderByDesc('start_date')->get();
 
-        return view('course.create', compact('courseCategories', 'departments'));
+        return view('course.create', compact('courseCategories', 'departments', 'semesters'));
     }
 
     public function store(StoreCourseRequest $request)
@@ -47,8 +49,9 @@ class CourseController extends Controller
         $course = $this->courseService->findById((int) $id);
         $courseCategories = CourseCategory::query()->orderBy('name')->get();
         $departments = Department::query()->orderBy('department_name')->get();
+        $semesters = Semester::query()->with('academicYear')->orderByDesc('start_date')->get();
 
-        return view('course.edit', compact('course', 'courseCategories', 'departments'));
+        return view('course.edit', compact('course', 'courseCategories', 'departments', 'semesters'));
     }
 
     public function update(UpdateCourseRequest $request, $id)

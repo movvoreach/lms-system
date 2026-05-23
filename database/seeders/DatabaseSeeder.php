@@ -78,7 +78,6 @@ class DatabaseSeeder extends Seeder
                 'email' => 'samphorstorng9999@gmail.com'
             ],
             [
-                'name' => 'samphors',
                 'username' => 'samphors',
                 'password' => Hash::make('password'),
                 'is_active' => true,

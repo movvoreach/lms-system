@@ -14,7 +14,7 @@ class EnsureTwoFactorVerified
             return redirect()->route('login');
         }
 
-        if (! $request->session()->get('two_factor_verified')) {
+        if ($request->user()->two_factor_enabled && ! $request->session()->get('two_factor_verified')) {
             return redirect()->route('two-factor.show');
         }
 

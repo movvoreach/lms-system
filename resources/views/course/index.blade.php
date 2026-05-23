@@ -51,6 +51,7 @@
                             <th>ចំណងជើង</th>
                             <th>ប្រភេទ</th>
                             <th>ដេប៉ាតឺម៉ង់</th>
+                            <th>Semester</th>
                             <th>ម៉ោង</th>
                             <th>តម្លៃ</th>
                             <th>ចាប់ផ្តើម</th>
@@ -67,6 +68,7 @@
                                 <td>{{ $course->title }}</td>
                                 <td>{{ $course->category->name ?? 'N/A' }}</td>
                                 <td>{{ $course->department->department_name ?? 'N/A' }}</td>
+                                <td>{{ $course->semester ? $course->semester->semester_name . ' - ' . ($course->semester->academicYear->year_label ?? 'N/A') : 'N/A' }}</td>
                                 <td>{{ $course->duration_hours ?? 'N/A' }}</td>
                                 <td>{{ number_format((float) $course->fee, 2) }}</td>
                                 <td>{{ $course->start_date?->format('Y-m-d') ?? 'N/A' }}</td>

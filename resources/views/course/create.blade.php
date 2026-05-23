@@ -60,6 +60,21 @@
 
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Semester</label>
+                            <select name="semester_id" class="form-control custom-select @error('semester_id') is-invalid @enderror">
+                                <option value="">-- Select semester --</option>
+                                @foreach ($semesters as $semester)
+                                    <option value="{{ $semester->semester_id }}" @selected(old('semester_id') == $semester->semester_id)>
+                                        {{ $semester->semester_name }} - {{ $semester->academicYear->year_label ?? 'N/A' }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('semester_id')<span class="invalid-feedback d-block">{{ $message }}</span>@enderror
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>ចំណងជើង <span class="text-danger">*</span></label>
                             <input type="text" name="title" class="form-control @error('title') is-invalid @enderror"
                                 value="{{ old('title') }}" required>

@@ -53,7 +53,9 @@
                             <th>Year Label</th>
                             <th>Start Date</th>
                             <th>End Date</th>
+                            <th>Status</th>
                             <th>Semesters</th>
+                            <th>Student Records</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -66,7 +68,13 @@
                                 </td>
                                 <td>{{ $academicYear->start_date?->format('Y-m-d') }}</td>
                                 <td>{{ $academicYear->end_date?->format('Y-m-d') }}</td>
+                                <td><span class="badge badge-secondary">{{ ucfirst($academicYear->status) }}</span></td>
                                 <td>{{ $academicYear->semesters_count }}</td>
+                                <td>
+                                    <a href="{{ route('admin.academic-progression.show', $academicYear->academic_year_id) }}">
+                                        {{ $academicYear->student_records_count }}
+                                    </a>
+                                </td>
                                 <td>
                                     <a href="{{ route('admin.academic-years.edit', $academicYear->academic_year_id) }}"
                                         class="btn btn-info btn-sm">

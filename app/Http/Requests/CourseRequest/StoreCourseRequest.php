@@ -16,6 +16,7 @@ class StoreCourseRequest extends FormRequest
         return [
             'category_id' => ['required', 'exists:course_categories,id'],
             'department_id' => ['required', 'exists:departments,department_id'],
+            'semester_id' => ['nullable', 'exists:semesters,semester_id'],
             'title' => ['required', 'string', 'max:255'],
             'code' => ['nullable', 'string', 'max:255', 'unique:courses,code'],
             'description' => ['nullable', 'string'],

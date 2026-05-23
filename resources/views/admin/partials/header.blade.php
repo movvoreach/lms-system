@@ -48,8 +48,8 @@
         <!-- USER DROPDOWN -->
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
-                <img src=" class="img-circle" width="30" height="30"
-                    style="object-fit:cover;">
+                <img src="{{ asset('backend/dist/img/user2-160x160.jpg') }}" class="img-circle" width="30" height="30"
+                    style="object-fit:cover;" alt="User avatar">
 
                 <span class="ml-1">
                     {{ Auth::user()->username ?? 'User' }}
@@ -69,7 +69,10 @@
 
                 <div class="dropdown-divider"></div>
 
-                <a href="" class="dropdown-item">
+                <a href="{{ route('profile.show') }}#two-factor" class="dropdown-item">
+                    <i class="fas fa-user-shield mr-2"></i> 2FA
+                </a>
+                <a href="{{ route('profile.show') }}" class="dropdown-item">
                     <i class="fas fa-user mr-2"></i> Profile
                 </a>
 

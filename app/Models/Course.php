@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Course extends Model
 {
@@ -13,6 +14,7 @@ class Course extends Model
     protected $fillable = [
         'category_id',
         'department_id',
+        'semester_id',
         'title',
         'code',
         'description',
@@ -38,5 +40,20 @@ class Course extends Model
     public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class, 'department_id', 'department_id');
+    }
+
+    public function semester(): BelongsTo
+    {
+        return $this->belongsTo(Semester::class, 'semester_id', 'semester_id');
+    }
+
+    public function studentRegistrations(): HasMany
+    {
+        return $this->hasMany(StudentCourseRegistration::class, 'course_id');
+    }
+
+    public function teacherAssignments(): HasMany
+    {
+        return $this->hasMany(TeacherCourseAssignment::class, 'course_id');
     }
 }
