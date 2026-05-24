@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Models\Course;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -14,6 +15,36 @@ Route::middleware('auth')->group(function () {
     Route::post('/two-factor/resend', [AuthController::class, 'resendTwoFactor'])->name('two-factor.resend');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+Route::get('/moodle-test', function () {
+    $courses = Course::query()
+        ->whereHas('lessonContents', function ($query) {
+            $query->where('is_published', true)
+                ->where('visibility', 'visible')
+                ->where(function ($query) {
+                    $query->whereNull('available_from')->orWhere('available_from', '<=', now());
+                })
+                ->where(function ($query) {
+                    $query->whereNull('available_until')->orWhere('available_until', '>=', now());
+                });
+        })
+        ->with(['lessonContents' => function ($query) {
+            $query->where('is_published', true)
+                ->where('visibility', 'visible')
+                ->where(function ($query) {
+                    $query->whereNull('available_from')->orWhere('available_from', '<=', now());
+                })
+                ->where(function ($query) {
+                    $query->whereNull('available_until')->orWhere('available_until', '>=', now());
+                })
+                ->orderBy('module_number')
+                ->orderBy('position');
+        }])
+        ->orderBy('title')
+        ->get();
+
+    return view('static.moodle-test', compact('courses'));
+})->name('moodle.test');
 
 Route::middleware(['auth', 'two.factor'])->group(function () {
     Route::get('/', function () {
@@ -30,6 +61,7 @@ Route::middleware(['auth', 'two.factor'])->group(function () {
     require __DIR__ . '/academic/semester.php';
     require __DIR__ . '/academic/course_category.php';
     require __DIR__ . '/academic/course.php';
+    require __DIR__ . '/academic/lesson_content.php';
     require __DIR__ . '/academic/user.php';
     require __DIR__ . '/academic/student.php';
     require __DIR__ . '/academic/teacher.php';

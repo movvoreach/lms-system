@@ -75,7 +75,11 @@ class DatabaseSeeder extends Seeder
         // Create Admin User
         $user = User::query()->updateOrCreate(
             [
+<<<<<<< ours
                 'email' => 'samphorstorng9999@gmail.com'
+=======
+                'email' => 'movvoreach@gmail.com'
+>>>>>>> theirs
             ],
             [
                 'username' => 'samphors',

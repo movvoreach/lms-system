@@ -70,6 +70,24 @@ class User extends Authenticatable
 
     public function hasRole(string $roleName): bool
     {
-        return $this->roles->contains('role_name', $roleName);
+        return $this->roles()->where('role_name', $roleName)->exists();
+    }
+
+    public function hasAnyRole(array $roleNames): bool
+    {
+        return $this->roles()->whereIn('role_name', $roleNames)->exists();
+    }
+
+    public function hasPermission(string $permissionCode): bool
+    {
+        if ($this->hasRole('Admin')) {
+            return true;
+        }
+
+        return $this->roles()
+            ->whereHas('permissions', function ($query) use ($permissionCode) {
+                $query->where('permission_code', $permissionCode);
+            })
+            ->exists();
     }
 }
