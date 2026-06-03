@@ -2,11 +2,6 @@
 
 @section('title', 'សិស្ស')
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-@endpush
-
 @section('content')
     <section class="content-header mt-4 px-0">
         <div class="container-fluid px-0">
@@ -93,6 +88,11 @@
                                         កែប្រែ
                                     </a>
 
+                                    <a href="{{ route('admin.student-enrollments.manage', $student->student_id) }}"
+                                        class="btn btn-primary btn-sm">
+                                        Enrollment
+                                    </a>
+
                                     <button class="btn btn-danger btn-sm deleteBtn"
                                         data-id="{{ $student->student_id }}"
                                         data-name="{{ $student->student_number }}">
@@ -138,10 +138,6 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('backend/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('backend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('backend/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('backend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
 
     <script>
         $(document).ready(function() {

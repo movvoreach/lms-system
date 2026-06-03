@@ -6,6 +6,7 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,6 +26,7 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'email',
+        'avatar',
         'password',
         'is_active',
         'last_login_at',
@@ -68,6 +70,21 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function student()
+    {
+        return $this->hasOne(Student::class, 'user_id', 'user_id');
+    }
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class, 'user_id', 'user_id');
+    }
+
+    public function activityLogs(): HasMany
+    {
+        return $this->hasMany(ActivityLog::class, 'user_id', 'user_id');
+    }
+
     public function hasRole(string $roleName): bool
     {
         return $this->roles()->where('role_name', $roleName)->exists();
@@ -80,7 +97,7 @@ class User extends Authenticatable
 
     public function hasPermission(string $permissionCode): bool
     {
-        if ($this->hasRole('Admin')) {
+        if ($this->hasAnyRole(['Administrator', 'Admin'])) {
             return true;
         }
 

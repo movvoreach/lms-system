@@ -116,7 +116,7 @@
                 <hr>
 
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
+                    <table id="promotionStudentTable" class="table table-bordered table-striped w-100">
                         <thead>
                             <tr>
                                 <th style="width: 48px;">
@@ -179,9 +179,17 @@
 
 @push('scripts')
     <script>
-        document.getElementById('selectAll')?.addEventListener('change', function () {
-            document.querySelectorAll('.student-check').forEach((checkbox) => {
-                checkbox.checked = this.checked;
+        $(document).ready(function() {
+            $('#promotionStudentTable').DataTable({
+                paging: false,
+                order: [[1, 'asc']],
+                columnDefs: [{ targets: 0, orderable: false, searchable: false }]
+            });
+
+            document.getElementById('selectAll')?.addEventListener('change', function () {
+                document.querySelectorAll('.student-check').forEach((checkbox) => {
+                    checkbox.checked = this.checked;
+                });
             });
         });
     </script>

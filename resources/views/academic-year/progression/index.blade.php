@@ -40,7 +40,7 @@
         </div>
 
         <div class="card-body table-responsive">
-            <table class="table table-bordered table-striped">
+            <table id="academicProgressionTable" class="table table-bordered table-striped w-100">
                 <thead>
                     <tr>
                         <th>ឆ្នាំសិក្សា</th>
@@ -89,3 +89,14 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#academicProgressionTable').DataTable({
+                order: [[0, 'asc']],
+                columnDefs: [{ targets: -1, orderable: false, searchable: false }]
+            });
+        });
+    </script>
+@endpush

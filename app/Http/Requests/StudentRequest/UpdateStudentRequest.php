@@ -16,7 +16,13 @@ class UpdateStudentRequest extends FormRequest
     {
         return [
             'course_id' => ['nullable', 'exists:courses,id'],
+            'course_ids' => ['nullable', 'array'],
+            'course_ids.*' => ['integer', 'exists:courses,id'],
+            'department_id' => ['nullable', 'exists:departments,department_id'],
             'academic_year_id' => ['nullable', 'exists:academic_years,academic_year_id'],
+            'semester_id' => ['nullable', 'exists:semesters,semester_id'],
+            'study_year' => ['nullable', 'integer', 'min:1', 'max:4'],
+            'term_number' => ['nullable', 'integer', 'in:1,2'],
             'username' => [
                 'required',
                 'string',

@@ -62,6 +62,29 @@
                         </div>
                     </div>
 
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Study Year <span class="text-danger">*</span></label>
+                            <select name="study_year" class="form-control custom-select" required>
+                                @foreach ([1, 2, 3, 4] as $year)
+                                    <option value="{{ $year }}" @selected((int) old('study_year', 1) === $year)>Year {{ $year }}</option>
+                                @endforeach
+                            </select>
+                            @error('study_year')<span class="invalid-feedback d-block">{{ $message }}</span>@enderror
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Semester <span class="text-danger">*</span></label>
+                            <select name="term_number" class="form-control custom-select" required>
+                                <option value="1" @selected((int) old('term_number', 1) === 1)>Semester 1</option>
+                                <option value="2" @selected((int) old('term_number') === 2)>Semester 2</option>
+                            </select>
+                            @error('term_number')<span class="invalid-feedback d-block">{{ $message }}</span>@enderror
+                        </div>
+                    </div>
+
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>ឈ្មោះឆមាស <span class="text-danger">*</span></label>

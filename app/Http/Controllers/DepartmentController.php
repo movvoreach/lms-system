@@ -6,6 +6,7 @@ use App\Http\Requests\DepartmentRequest\StoreDepartmentRequest;
 use App\Http\Requests\DepartmentRequest\UpdateDepartmentRequest;
 use App\Models\Faculty;
 use App\Services\DepartmentService;
+use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
@@ -21,11 +22,13 @@ class DepartmentController extends Controller
      * LIST (VIEW PAGE)
      * =========================
      */
-    public function index()
+    public function index(Request $request)
     {
-        $departments = $this->departmentService->getAllDepartments();
+        $years = $this->departmentService->getDepartmentYears();
+        $selectedYear = (int) ($request->integer('year') ?: ($years->first() ?: now()->year));
+        $departments = $this->departmentService->getAllDepartments($selectedYear);
 
-        return view('department.index', compact('departments'));
+        return view('department.index', compact('departments', 'years', 'selectedYear'));
     }
 
     /**
@@ -35,6 +38,11 @@ class DepartmentController extends Controller
      */
     public function create()
     {
+        Faculty::query()->firstOrCreate(
+            ['faculty_code' => 'GEN'],
+            ['faculty_name' => 'General Faculty']
+        );
+
         $faculties = Faculty::orderBy('faculty_name')->get();
 
         return view('department.create', compact('faculties'));
@@ -64,6 +72,11 @@ class DepartmentController extends Controller
     public function edit($id)
     {
         $department = $this->departmentService->findDepartmentById($id);
+
+        Faculty::query()->firstOrCreate(
+            ['faculty_code' => 'GEN'],
+            ['faculty_name' => 'General Faculty']
+        );
 
         $faculties = Faculty::orderBy('faculty_name')->get();
 

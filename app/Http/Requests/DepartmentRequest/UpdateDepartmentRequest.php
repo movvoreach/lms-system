@@ -18,7 +18,7 @@ class UpdateDepartmentRequest extends FormRequest
         $departmentId = is_object($department) ? $department->getKey() : $department;
 
         return [
-            'faculty_id' => ['required', 'exists:faculties,faculty_id'],
+            'faculty_id' => ['nullable', 'exists:faculties,faculty_id'],
             'department_code' => [
                 'required',
                 'string',
@@ -44,4 +44,3 @@ class UpdateDepartmentRequest extends FormRequest
         ];
     }
 }
-

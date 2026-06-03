@@ -35,7 +35,7 @@
         </div>
 
         <div class="card-body table-responsive">
-            <table class="table table-bordered table-striped">
+            <table id="academicProgressionRecordsTable" class="table table-bordered table-striped w-100">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -88,3 +88,13 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#academicProgressionRecordsTable').DataTable({
+                order: [[0, 'asc']]
+            });
+        });
+    </script>
+@endpush

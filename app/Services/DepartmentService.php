@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\Department;
+use App\Models\Faculty;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
@@ -14,12 +16,26 @@ class DepartmentService
     /**
      * Get all departments (with relations)
      */
-    public function getAllDepartments(): Collection
+    public function getAllDepartments(?int $year = null): Collection
     {
         return Department::query()
             ->with('faculty')
+            ->withCount('courses')
+            ->when($year, function ($query) use ($year) {
+                $query->whereYear('created_at', $year);
+            })
             ->latest('department_id')
             ->get();
+    }
+
+    public function getDepartmentYears(): SupportCollection
+    {
+        return Department::query()
+            ->selectRaw('YEAR(created_at) as year')
+            ->whereNotNull('created_at')
+            ->distinct()
+            ->orderByDesc('year')
+            ->pluck('year');
     }
 
     /**
@@ -29,6 +45,8 @@ class DepartmentService
     {
         try {
             return DB::transaction(function () use ($data) {
+                $data['faculty_id'] = $data['faculty_id'] ?? $this->defaultFacultyId();
+
                 return Department::create($data);
             });
         } catch (Throwable $exception) {
@@ -55,6 +73,7 @@ class DepartmentService
             return DB::transaction(function () use ($id, $data) {
 
                 $department = $this->findDepartmentById($id);
+                $data['faculty_id'] = $data['faculty_id'] ?? $this->defaultFacultyId();
 
                 $department->update($data);
 
@@ -111,5 +130,13 @@ class DepartmentService
     public function findDepartmentById(int $id): Department
     {
         return Department::query()->findOrFail($id);
+    }
+
+    private function defaultFacultyId(): int
+    {
+        return Faculty::query()->firstOrCreate(
+            ['faculty_code' => 'GEN'],
+            ['faculty_name' => 'General Faculty']
+        )->faculty_id;
     }
 }

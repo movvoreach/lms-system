@@ -14,7 +14,7 @@ class StoreDepartmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'faculty_id' => ['required', 'exists:faculties,faculty_id'],
+            'faculty_id' => ['nullable', 'exists:faculties,faculty_id'],
             'department_code' => ['required', 'string', 'max:30', 'unique:departments,department_code'],
             'department_name' => ['required', 'string', 'max:150'],
             'deans' => ['nullable', 'string', 'max:255'],
@@ -35,4 +35,3 @@ class StoreDepartmentRequest extends FormRequest
         ];
     }
 }
-
