@@ -42,13 +42,12 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>
-                            មហាវិទ្យាល័យ <span class="text-danger">*</span>
+                            មហាវិទ្យាល័យ
                         </label>
 
                         <select name="faculty_id"
-                                class="form-control custom-select @error('faculty_id') is-invalid @enderror"
-                                required>
-                            <option value="">-- ជ្រើសរើសមហាវិទ្យាល័យ --</option>
+                                class="form-control custom-select @error('faculty_id') is-invalid @enderror">
+                            <option value="">-- Default: General Faculty --</option>
                             @foreach ($faculties as $faculty)
                                 <option value="{{ $faculty->faculty_id }}"
                                     @selected(old('faculty_id') == $faculty->faculty_id)>

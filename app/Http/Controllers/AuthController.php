@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -71,6 +72,7 @@ class AuthController extends Controller
             $this->loginLogService->record($request, $user, 'success');
             $request->session()->put('two_factor_verified', true);
             $request->session()->forget('two_factor_otp_sent');
+            activity_log('login', 'Authentication', "{$user->username} logged into the system");
 
             return redirect()->intended(route('admin.dashboard'));
         }
@@ -125,6 +127,7 @@ class AuthController extends Controller
         $this->loginLogService->record($request, $user, 'success');
         $request->session()->put('two_factor_verified', true);
         $request->session()->forget('two_factor_otp_sent');
+        activity_log('login', 'Authentication', "{$user->username} logged into the system");
 
         return redirect()->intended(route('admin.dashboard'));
     }
@@ -173,6 +176,8 @@ class AuthController extends Controller
             'two_factor_expires_at' => null,
         ])->save();
 
+        activity_log('update', 'Security', 'User updated two-factor authentication settings.');
+
         $request->session()->put('two_factor_verified', true);
         $request->session()->forget('two_factor_otp_sent');
 
@@ -181,8 +186,38 @@ class AuthController extends Controller
             : 'Two-factor authentication has been disabled.');
     }
 
+    public function updateAvatar(Request $request)
+    {
+        $validated = $request->validate([
+            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+        ], [
+            'avatar.required' => 'Please choose an image.',
+            'avatar.image' => 'The uploaded file must be an image.',
+            'avatar.mimes' => 'Profile image must be JPG, PNG, or WEBP.',
+            'avatar.max' => 'Profile image may not be larger than 2MB.',
+        ]);
+
+        $user = $request->user();
+
+        if ($user->avatar && str_starts_with($user->avatar, 'avatars/')) {
+            Storage::disk('public')->delete($user->avatar);
+        }
+
+        $path = $validated['avatar']->store('avatars', 'public');
+
+        $user->forceFill(['avatar' => $path])->save();
+
+        activity_log('upload', 'Profile', 'User updated profile image.');
+
+        return back()->with('success', 'Profile image updated successfully.');
+    }
+
     public function logout(Request $request)
     {
+        if ($request->user()) {
+            activity_log('logout', 'Authentication', "{$request->user()->username} logged out of the system");
+        }
+
         if ($request->user()) {
             $this->clearOtp($request->user());
         }

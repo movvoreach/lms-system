@@ -23,7 +23,7 @@
             <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
                 @empty($student) required @endempty>
             @isset($student)
-                <small class="form-text text-muted">Leave blank to keep current password.</small>
+                <small class="form-text text-muted">Leave blank to keep the current password.</small>
             @endisset
             @error('password')<span class="invalid-feedback d-block">{{ $message }}</span>@enderror
         </div>
@@ -32,41 +32,8 @@
     <div class="col-md-6">
         <div class="form-group">
             <label>Confirm Password @empty($student)<span class="text-danger">*</span>@endempty</label>
-            <input type="password" name="password_confirmation" class="form-control" @empty($student) required @endempty>
-        </div>
-    </div>
-
-    <div class="col-md-6">
-        <div class="form-group">
-            <label>Course</label>
-            <select name="course_id" class="form-control custom-select @error('course_id') is-invalid @enderror">
-                <option value="">-- Select course --</option>
-                @foreach ($courses as $course)
-                    <option value="{{ $course->id }}" @selected(old('course_id', $student->course_id ?? '') == $course->id)>
-                        {{ $course->title }}
-                    </option>
-                @endforeach
-            </select>
-            @error('course_id')<span class="invalid-feedback d-block">{{ $message }}</span>@enderror
-        </div>
-    </div>
-
-    <div class="col-md-6">
-        <div class="form-group">
-            <label>Initial Academic Year</label>
-            <select name="academic_year_id" class="form-control custom-select @error('academic_year_id') is-invalid @enderror"
-                @isset($student) disabled @endisset>
-                <option value="">-- Select academic year --</option>
-                @foreach ($academicYears as $academicYear)
-                    <option value="{{ $academicYear->academic_year_id }}" @selected(old('academic_year_id') == $academicYear->academic_year_id)>
-                        {{ $academicYear->year_label }} ({{ $academicYear->status }})
-                    </option>
-                @endforeach
-            </select>
-            @isset($student)
-                <small class="form-text text-muted">Academic year history is managed from Academic Progression.</small>
-            @endisset
-            @error('academic_year_id')<span class="invalid-feedback d-block">{{ $message }}</span>@enderror
+            <input type="password" name="password_confirmation" class="form-control"
+                @empty($student) required @endempty>
         </div>
     </div>
 

@@ -16,6 +16,10 @@ class StudentAcademicYearRecord extends Model
     protected $fillable = [
         'student_id',
         'academic_year_id',
+        'department_id',
+        'semester_id',
+        'study_year',
+        'term_number',
         'course_id',
         'status',
         'promotion_type',
@@ -25,6 +29,8 @@ class StudentAcademicYearRecord extends Model
     ];
 
     protected $casts = [
+        'study_year' => 'integer',
+        'term_number' => 'integer',
         'promoted_at' => 'datetime',
     ];
 
@@ -41,6 +47,16 @@ class StudentAcademicYearRecord extends Model
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class, 'course_id');
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class, 'department_id', 'department_id');
+    }
+
+    public function semester(): BelongsTo
+    {
+        return $this->belongsTo(Semester::class, 'semester_id', 'semester_id');
     }
 
     public function previousRecord(): BelongsTo

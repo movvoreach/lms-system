@@ -1,5 +1,6 @@
 <?php
 
+<<<<<<< HEAD
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -34,3 +35,8 @@ Route::middleware(['auth', 'two.factor', 'telegram.action.alert'])->group(functi
     require __DIR__ . '/academic/student.php';
     require __DIR__ . '/academic/teacher.php';
 });
+=======
+require __DIR__ . '/frontend/website/index.php';
+require __DIR__ . '/backend/auth.php';
+require __DIR__ . '/backend/index.php';
+>>>>>>> c4098f68c864b23f4e16c45087522c4173ca4b8e

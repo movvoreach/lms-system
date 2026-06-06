@@ -2,11 +2,6 @@
 
 @section('title', 'គ្រប់គ្រង Course')
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-@endpush
-
 @section('content')
     <section class="content-header mt-4 px-0">
         <div class="container-fluid px-0">
@@ -116,10 +111,6 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('backend/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('backend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('backend/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('backend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('#courseTable').DataTable({

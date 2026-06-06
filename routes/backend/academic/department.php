@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AcademicBrowserController;
 use App\Http\Controllers\DepartmentController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -14,6 +15,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/departments/create', [DepartmentController::class, 'create'])
         ->name('departments.create');
+
+    Route::get('/departments/{department}/courses', [AcademicBrowserController::class, 'departmentCourses'])
+        ->name('departments.courses.index');
 
     Route::post('/departments', [DepartmentController::class, 'store'])
         ->name('departments.store');

@@ -56,4 +56,19 @@ class Course extends Model
     {
         return $this->hasMany(TeacherCourseAssignment::class, 'course_id');
     }
+
+    public function lessonContents(): HasMany
+    {
+        return $this->hasMany(LessonContent::class, 'course_id');
+    }
+
+    public function lessonGrades(): HasMany
+    {
+        return $this->hasMany(StudentLessonGrade::class, 'course_id');
+    }
+
+    public function certificateRequests(): HasMany
+    {
+        return $this->hasMany(CertificateRequest::class, 'course_id');
+    }
 }

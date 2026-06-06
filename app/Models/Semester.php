@@ -14,12 +14,16 @@ class Semester extends Model
 
     protected $fillable = [
         'academic_year_id',
+        'study_year',
+        'term_number',
         'semester_name',
         'start_date',
         'end_date',
     ];
 
     protected $casts = [
+        'study_year' => 'integer',
+        'term_number' => 'integer',
         'start_date' => 'date',
         'end_date' => 'date',
     ];

@@ -15,7 +15,13 @@ class StoreStudentRequest extends FormRequest
     {
         return [
             'course_id' => ['nullable', 'exists:courses,id'],
+            'course_ids' => ['nullable', 'array'],
+            'course_ids.*' => ['integer', 'exists:courses,id'],
+            'department_id' => ['nullable', 'exists:departments,department_id'],
             'academic_year_id' => ['nullable', 'exists:academic_years,academic_year_id'],
+            'semester_id' => ['required_with:academic_year_id', 'nullable', 'exists:semesters,semester_id'],
+            'study_year' => ['required_with:academic_year_id', 'nullable', 'integer', 'min:1', 'max:4'],
+            'term_number' => ['required_with:academic_year_id', 'nullable', 'integer', 'in:1,2'],
             'username' => ['required', 'string', 'max:100', 'unique:users,username'],
             'email' => ['required', 'email', 'max:150', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],

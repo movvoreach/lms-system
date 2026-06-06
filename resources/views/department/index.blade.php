@@ -1,208 +1,238 @@
 @extends('admin.layouts.master')
 
-@section('title', 'គ្រប់គ្រងដេប៉ាតឺម៉ង់')
-
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-
-    <style>
-        /* ===== TABLE FIX ===== */
-        #departmentTable {
-            width: 100% !important;
-            table-layout: fixed;
-        }
-
-        #departmentTable td {
-            word-break: break-word;
-            white-space: normal;
-        }
-
-        /* Badge better UI */
-        .badge-primary {
-            font-size: 12px;
-            padding: 5px 8px;
-        }
-    </style>
-@endpush
+@section('title', 'នាយកដ្ឋាន')
 
 @section('content')
-    <div class="admin-business-page department-page">
-        <section class="content-header mt-4 px-0">
-            <div class="container-fluid px-0">
-                <div class="row mb-2 align-items-center">
-                    <div class="col-sm-7">
-                        <h1 class="mb-1">គ្រប់គ្រងដេប៉ាតឺម៉ង់</h1>
-                        <p class="text-muted mb-0">បង្កើត ពិនិត្យ កែប្រែ និងលុបដេប៉ាតឺម៉ង់តាមមហាវិទ្យាល័យ។</p>
-                    </div>
-                    <div class="col-sm-5">
-                        <ol class="breadcrumb float-sm-right mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="">
-
-                                    ផ្ទាំងគ្រប់គ្រង
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item active">ដេប៉ាតឺម៉ង់</li>
-                        </ol>
-                    </div>
+    <section class="content-header mt-4 px-0">
+        <div class="container-fluid px-0">
+            <div class="row mb-2 align-items-center">
+                <div class="col-sm-7">
+                    <h1 class="mb-1">នាយកដ្ឋាន</h1>
+                    <p class="text-muted mb-0">មើលនាយកដ្ឋាន ចំនួនវគ្គសិក្សា និងវគ្គសិក្សាដែលពាក់ព័ន្ធ។</p>
+                </div>
+                <div class="col-sm-5">
+                    <ol class="breadcrumb float-sm-right mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('admin.dashboard') }}">ផ្ទាំងគ្រប់គ្រង</a>
+                        </li>
+                        <li class="breadcrumb-item active">នាយកដ្ឋាន</li>
+                    </ol>
                 </div>
             </div>
-        </section>
-        <div class="card shadow-sm mt-2">
+        </div>
+    </section>
 
-            <div class="card-header">
-                <h3 class="card-title">បញ្ជីដេប៉ាតឺម៉ង់</h3>
+    @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
-                <div class="card-tools">
-                    <a href="{{ route('admin.departments.create') }}" class="btn btn-primary btn-sm">
-                        បង្កើត
+    @if (session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-body py-3">
+            <form method="GET" action="{{ route('admin.departments.index') }}" class="row align-items-end">
+                <div class="col-md-4">
+                    <label>ឆ្នាំ</label>
+                    <select name="year" class="form-control" onchange="this.form.submit()">
+                        @forelse ($years as $year)
+                            <option value="{{ $year }}" @selected((int) $selectedYear === (int) $year)>
+                                {{ $year }}
+                            </option>
+                        @empty
+                            <option value="{{ $selectedYear }}">{{ $selectedYear }}</option>
+                        @endforelse
+                    </select>
+                </div>
+
+                <div class="col-md-8 text-md-right mt-3 mt-md-0">
+                    <a href="{{ route('admin.departments.create') }}" class="btn btn-primary">
+                        <i class="fas fa-plus mr-1"></i> បន្ថែមនាយកដ្ឋាន
                     </a>
                 </div>
-            </div>
+            </form>
+        </div>
+    </div>
 
-            <div class="card-body">
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h3 class="card-title mb-0">បញ្ជីនាយកដ្ឋាន</h3>
+        </div>
 
-                {{-- ✅ RESPONSIVE WRAPPER --}}
-                <div class="table-responsive">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="departmentTable" class="table table-bordered table-striped w-100">
+                    <thead>
+                        <tr>
+                            <th>ល.រ</th>
+                            <th>កូដនាយកដ្ឋាន</th>
+                            <th>ឈ្មោះនាយកដ្ឋាន</th>
+                            <th>មហាវិទ្យាល័យ</th>
+                            <th>ព្រឹទ្ធបុរស</th>
+                            <th>វគ្គសិក្សា</th>
+                            <th>ឆ្នាំ</th>
+                            <th>បង្កើតនៅ</th>
+                            <th>សកម្មភាព</th>
+                        </tr>
+                    </thead>
 
-                    <table id="departmentTable" class="table table-bordered table-striped w-100">
-
-                        <thead>
+                    <tbody>
+                        @forelse ($departments as $key => $department)
                             <tr>
-                                <th>#</th>
-                                <th>មហាវិទ្យាល័យ</th>
-                                <th>កូដ</th>
-                                <th>ឈ្មោះ</th>
-                                <th>ព្រឹទ្ធបុរស</th>
-                                <th>ថ្ងៃបង្កើត</th>
-                                <th>សកម្មភាព</th>
-                            </tr>
-                        </thead>
+                                <td>{{ $key + 1 }}</td>
 
-                        <tbody>
-                            @foreach ($departments as $key => $department)
-                                <tr>
-                                    <td>{{ $key + 1 }}</td>
+                                <td>
+                                    <span class="badge badge-primary">
+                                        {{ $department->department_code ?? 'គ្មាន' }}
+                                    </span>
+                                </td>
 
-                                    <td>{{ $department->faculty->faculty_name ?? 'N/A' }}</td>
+                                <td>{{ $department->department_name }}</td>
 
-                                    <td>
-                                        <span class="badge badge-primary">
-                                            {{ $department->department_code }}
-                                        </span>
-                                    </td>
+                                <td>{{ $department->faculty->faculty_name ?? 'គ្មាន' }}</td>
 
-                                    <td>{{ $department->department_name }}</td>
+                                <td>{{ $department->deans ?? 'គ្មាន' }}</td>
 
-                                    <td>{{ $department->deans ?? 'N/A' }}</td>
+                                <td>
+                                    <span class="badge badge-info">
+                                        {{ $department->courses_count ?? 0 }}
+                                    </span>
+                                </td>
 
-                                    <td>{{ $department->created_at?->format('Y-m-d H:i') }}</td>
+                                <td>
+                                    {{ $department->created_at?->format('Y') ?? $selectedYear }}
+                                </td>
 
-                                    <td>
-                                        <a href="{{ route('admin.departments.edit', $department->department_id) }}"
-                                            class="btn btn-info btn-sm">
-                                            Edit
-                                        </a>
+                                <td>
+                                    {{ $department->created_at?->format('Y-m-d H:i') ?? 'គ្មាន' }}
+                                </td>
 
-                                        <button class="btn btn-danger btn-sm deleteBtn"
-                                            data-id="{{ $department->department_id }}"
-                                            data-name="{{ $department->department_name }}">
-                                            Delete
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn btn-primary btn-sm text-center"
+                                            data-toggle="dropdown">
+
+                                            <i class="fas fa-ellipsis-v ml-1"></i>
                                         </button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
 
-                    </table>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a href="{{ route('admin.departments.courses.index', $department->department_id) }}"
+                                                class="dropdown-item">
+                                                <i class="fas fa-eye mr-2"></i>
+                                                មើលវគ្គសិក្សា
+                                            </a>
 
-                </div>
+                                            <a href="{{ route('admin.departments.edit', $department->department_id) }}"
+                                                class="dropdown-item">
+                                                <i class="fas fa-edit mr-2"></i>
+                                                កែប្រែ
+                                            </a>
+
+                                            <button type="button"
+                                                class="dropdown-item text-danger deleteBtn"
+                                                data-id="{{ $department->department_id }}"
+                                                data-name="{{ $department->department_name }}">
+                                                <i class="fas fa-trash-alt mr-2"></i>
+                                                លុប
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="9" class="text-center text-muted py-4">
+                                    មិនមានទិន្នន័យនាយកដ្ឋានទេ។
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
 
-        {{-- DELETE MODAL --}}
-        <div class="modal fade" id="deleteModal">
-            <div class="modal-dialog">
-                <form method="POST" id="deleteForm">
-                    @csrf
-                    @method('DELETE')
+    <div class="modal fade" id="deleteModal">
+        <div class="modal-dialog">
+            <form method="POST" id="deleteForm">
+                @csrf
+                @method('DELETE')
 
-                    <div class="modal-content">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">លុបនាយកដ្ឋាន</h5>
 
-                        <div class="modal-header bg-danger text-white">
-                            <h5 class="modal-title">Delete Department</h5>
-                            <button type="button" class="close text-white" data-dismiss="modal">
-                                &times;
-                            </button>
-                        </div>
-
-                        <div class="modal-body">
-                            Are you sure delete <b id="deptName"></b>?
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                Cancel
-                            </button>
-                            <button type="submit" class="btn btn-danger">
-                                Delete
-                            </button>
-                        </div>
-
+                        <button type="button" class="close text-white"
+                            data-dismiss="modal">&times;</button>
                     </div>
-                </form>
-            </div>
+
+                    <div class="modal-body">
+                        តើអ្នកពិតជាចង់លុប
+                        <b id="deptName"></b>
+                        មែនទេ?
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                            data-dismiss="modal">
+                            បោះបង់
+                        </button>
+
+                        <button type="submit" class="btn btn-danger">
+                            លុប
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
+    </div>
+@endsection
 
-    @endsection
+@push('scripts')
+    <script>
+        $(document).ready(function() {
 
-    @push('scripts')
-        <script src="{{ asset('backend/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('backend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('backend/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-        <script src="{{ asset('backend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-
-        <script>
-            $(document).ready(function() {
-
-                // ✅ FIXED DATATABLE (SEARCH + RESPONSIVE + WIDTH)
-                $('#departmentTable').DataTable({
-                    responsive: true,
-                    autoWidth: false,
-                    pageLength: 10,
-                    order: [
-                        [0, 'asc']
-                    ],
-                    columnDefs: [{
-                        targets: -1,
-                        orderable: false,
-                        searchable: false
-                    }],
-                    language: {
-                        search: "ស្វែងរក:",
-                        lengthMenu: "បង្ហាញ _MENU_ ទិន្នន័យ",
-                        info: "បង្ហាញ _START_ ដល់ _END_ ក្នុងចំណោម _TOTAL_",
-                        zeroRecords: "មិនមានទិន្នន័យ",
-                        paginate: {
-                            next: "បន្ទាប់",
-                            previous: "មុន"
-                        }
-                    }
-                });
-
-                // ✅ DELETE MODAL
-                $(document).on('click', '.deleteBtn', function() {
-
-                    let id = $(this).data('id');
-                    let name = $(this).data('name');
-
-                    $('#deptName').text(name);
-                    $('#deleteForm').attr('action', '/admin/departments/' + id);
-
-                    $('#deleteModal').modal('show');
-                });
-
+            $('#departmentTable').DataTable({
+                responsive: true,
+                autoWidth: false,
+                pageLength: 10,
+                order: [
+                    [0, 'asc']
+                ],
+                columnDefs: [{
+                    targets: -1,
+                    orderable: false,
+                    searchable: false
+                }],
+                language: {
+                    search: "ស្វែងរក:",
+                    lengthMenu: "បង្ហាញ _MENU_ ជួរ",
+                    info: "បង្ហាញ _START_ ដល់ _END_ នៃ _TOTAL_ ជួរ",
+                    paginate: {
+                        first: "ដំបូង",
+                        last: "ចុងក្រោយ",
+                        next: "បន្ទាប់",
+                        previous: "មុន"
+                    },
+                    zeroRecords: "មិនមានទិន្នន័យ",
+                    infoEmpty: "គ្មានទិន្នន័យ",
+                    infoFiltered: "(ចម្រោះពី _MAX_ ជួរ)"
+                }
             });
-        </script>
-    @endpush
+
+            $(document).on('click', '.deleteBtn', function() {
+
+                $('#deptName').text($(this).data('name'));
+
+                $('#deleteForm').attr(
+                    'action',
+                    '/admin/departments/' + $(this).data('id')
+                );
+
+                $('#deleteModal').modal('show');
+            });
+
+        });
+    </script>
+@endpush
