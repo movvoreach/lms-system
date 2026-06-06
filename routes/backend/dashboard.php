@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use App\Models\ActivityLog;
 use App\Models\CertificateRequest;
 use App\Models\Course;
@@ -10,7 +9,7 @@ use App\Models\Student;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/admin/dashboard', function () {
+Route::get('/dashboard', function () {
     $studentTrendMonths = collect(range(5, 0))->map(function ($monthsAgo) {
         return now()->startOfMonth()->subMonths($monthsAgo);
     });
@@ -48,8 +47,7 @@ Route::get('/admin/dashboard', function () {
             ->get(),
         'todayActivityLogs' => ActivityLog::query()->whereDate('created_at', today())->count(),
     ]);
-})->middleware('can:dashboard.access')->name('admin.dashboard');
+})->middleware('can:dashboard.access')->name('dashboard');
 
-Route::get('/profile', [AuthController::class, 'profile'])->name('profile.show');
-Route::patch('/profile/avatar', [AuthController::class, 'updateAvatar'])->name('profile.avatar.update');
-Route::patch('/profile/two-factor', [AuthController::class, 'updateTwoFactor'])->name('profile.two-factor.update');
+
+

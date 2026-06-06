@@ -7,7 +7,6 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -71,25 +70,9 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-<<<<<<< HEAD
     public function loginLogs(): HasMany
     {
         return $this->hasMany(LoginLog::class, 'user_id', 'user_id');
-=======
-    public function student()
-    {
-        return $this->hasOne(Student::class, 'user_id', 'user_id');
-    }
-
-    public function teacher()
-    {
-        return $this->hasOne(Teacher::class, 'user_id', 'user_id');
-    }
-
-    public function activityLogs(): HasMany
-    {
-        return $this->hasMany(ActivityLog::class, 'user_id', 'user_id');
->>>>>>> c4098f68c864b23f4e16c45087522c4173ca4b8e
     }
 
     public function hasRole(string $roleName): bool
