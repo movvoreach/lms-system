@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\TelegramActionAlertService;
+use App\Services\LoginLogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -12,6 +14,13 @@ use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
     private const OTP_EXPIRY_MINUTES = 5;
+
+    public function __construct(
+        private readonly LoginLogService $loginLogService,
+        private readonly TelegramActionAlertService $telegramActionAlertService
+    )
+    {
+    }
 
     public function showLogin()
     {
@@ -31,6 +40,12 @@ class AuthController extends Controller
         $field = filter_var($credentials['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
         if (! Auth::attempt([$field => $credentials['login'], 'password' => $credentials['password']])) {
+            $this->loginLogService->record(
+                $request,
+                User::where($field, $credentials['login'])->first(),
+                'failed'
+            );
+
             throw ValidationException::withMessages([
                 'login' => 'The provided login details are incorrect.',
             ]);
@@ -41,6 +56,8 @@ class AuthController extends Controller
         $user = $request->user();
 
         if (! $user->is_active) {
+            $this->loginLogService->record($request, $user, 'disabled');
+
             $this->logoutCurrentSession($request);
 
             return redirect()->route('login')
@@ -51,6 +68,7 @@ class AuthController extends Controller
             $this->clearOtp($user);
 
             $user->forceFill(['last_login_at' => now()])->save();
+            $this->loginLogService->record($request, $user, 'success');
             $request->session()->put('two_factor_verified', true);
             $request->session()->forget('two_factor_otp_sent');
 
@@ -91,6 +109,7 @@ class AuthController extends Controller
 
         if (! $this->otpIsValid($user, $request->input('otp'))) {
             $this->clearOtp($user);
+            $this->loginLogService->record($request, $user, 'otp_failed');
             $this->logoutCurrentSession($request);
 
             return redirect()->route('login')
@@ -103,6 +122,7 @@ class AuthController extends Controller
             'last_login_at' => now(),
         ])->save();
 
+        $this->loginLogService->record($request, $user, 'success');
         $request->session()->put('two_factor_verified', true);
         $request->session()->forget('two_factor_otp_sent');
 
@@ -116,6 +136,13 @@ class AuthController extends Controller
         }
 
         $this->sendOtp($request->user());
+        $this->telegramActionAlertService->send('LMS OTP Sent', [
+            'User' => $request->user()->username.' ('.$request->user()->email.')',
+            'IP' => $request->ip() ?? 'N/A',
+            'Browser' => $request->userAgent() ?? 'N/A',
+            'Expires In' => self::OTP_EXPIRY_MINUTES.' minutes',
+            'Time' => now()->format('Y-m-d H:i:s'),
+        ]);
         $request->session()->put('two_factor_otp_sent', true);
 
         return redirect()->route('two-factor.show')

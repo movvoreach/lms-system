@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'two.factor' => \App\Http\Middleware\EnsureTwoFactorVerified::class,
+            'telegram.action.alert' => \App\Http\Middleware\SendTelegramActionAlert::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

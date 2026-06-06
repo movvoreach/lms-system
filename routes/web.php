@@ -8,14 +8,14 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login.store');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'telegram.action.alert'])->group(function () {
     Route::get('/two-factor', [AuthController::class, 'showTwoFactor'])->name('two-factor.show');
     Route::post('/two-factor', [AuthController::class, 'verifyTwoFactor'])->name('two-factor.verify');
     Route::post('/two-factor/resend', [AuthController::class, 'resendTwoFactor'])->name('two-factor.resend');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::middleware(['auth', 'two.factor'])->group(function () {
+Route::middleware(['auth', 'two.factor', 'telegram.action.alert'])->group(function () {
     Route::get('/', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');

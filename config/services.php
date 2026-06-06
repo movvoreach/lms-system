@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'telegram' => [
+        'bot_token' => env('TELEGRAM_BOT_TOKEN'),
+        'login_alert_chat_id' => env('TELEGRAM_LOGIN_ALERT_CHAT_ID'),
+        'login_location_lookup' => env('TELEGRAM_LOGIN_LOCATION_LOOKUP', true),
+    ],
+
 ];
