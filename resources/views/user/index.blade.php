@@ -110,7 +110,8 @@
     <script>
         $(document).ready(function() {
             $('#userTable').DataTable({
-                responsive: true,
+                responsive: false,
+                scrollX: true,
                 autoWidth: false,
                 pageLength: 10,
                 order: [[0, 'asc']],

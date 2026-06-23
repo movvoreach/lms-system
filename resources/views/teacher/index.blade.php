@@ -127,7 +127,8 @@
     <script>
         $(document).ready(function() {
             $('#teacherTable').DataTable({
-                responsive: true,
+                responsive: false,
+                scrollX: true,
                 autoWidth: false,
                 pageLength: 10,
                 order: [[0, 'asc']],

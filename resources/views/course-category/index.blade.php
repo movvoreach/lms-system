@@ -103,7 +103,8 @@
     <script>
         $(document).ready(function() {
             $('#courseCategoryTable').DataTable({
-                responsive: true,
+                responsive: false,
+                scrollX: true,
                 autoWidth: false,
                 pageLength: 10,
                 order: [[0, 'asc']],

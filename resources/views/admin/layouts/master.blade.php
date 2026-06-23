@@ -86,60 +86,19 @@
         .dataTables_wrapper,
         .dt-container {
             position: relative;
+            width: 100%;
         }
 
-        .lms-dt-loader {
-            align-items: center;
-            background: rgba(255, 255, 255, .7);
-            display: none;
-            inset: 0;
-            justify-content: center;
-            pointer-events: none;
-            position: absolute;
-            z-index: 30;
+        .table-responsive .dataTables_wrapper,
+        .table-responsive .dt-container {
+            min-width: 100%;
         }
 
-        .lms-dt-loader.is-visible {
-            display: flex;
+        table.dataTable {
+            width: 100% !important;
         }
 
-        .lms-dt-loader > div {
-            display: inline-flex;
-            gap: 8px;
-        }
-
-        .lms-dt-loader > div > div {
-            animation: lms-dt-pulse .75s ease-in-out infinite;
-            background: #1479e8;
-            border-radius: 50%;
-            height: 12px;
-            width: 12px;
-        }
-
-        .lms-dt-loader > div > div:nth-child(2) {
-            animation-delay: .1s;
-        }
-
-        .lms-dt-loader > div > div:nth-child(3) {
-            animation-delay: .2s;
-        }
-
-        .lms-dt-loader > div > div:nth-child(4) {
-            animation-delay: .3s;
-        }
-
-        @keyframes lms-dt-pulse {
-            0%,
-            100% {
-                opacity: .35;
-                transform: scale(.72);
-            }
-
-            50% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+        /* Custom skeleton loader styles removed */
     </style>
 
     {{-- Your page styles --}}
@@ -212,7 +171,8 @@
             if ($.fn.DataTable) {
                 $.extend(true, $.fn.dataTable.defaults, {
                     processing: false,
-                    responsive: true,
+                    responsive: false,
+                    scrollX: true,
                     autoWidth: false,
                     pageLength: 10,
                     language: {
@@ -236,7 +196,8 @@
             if ($.fn.DataTable) {
                 window.LmsDataTableDefaults = {
                     processing: false,
-                    responsive: true,
+                    responsive: false,
+                    scrollX: true,
                     autoWidth: false,
                     pageLength: 10,
                     language: {
@@ -259,59 +220,7 @@
                 $.extend(true, $.fn.dataTable.defaults, window.LmsDataTableDefaults);
 
                 window.attachLmsDataTableLoader = function(table) {
-                    const $table = $(table);
-
-                    if ($table.data('lms-loader-attached')) {
-                        return;
-                    }
-
-                    $table.data('lms-loader-attached', true);
-
-                    function wrapper() {
-                        return $table.closest('.dataTables_wrapper, .dt-container');
-                    }
-
-                    function loader() {
-                        const $wrapper = wrapper();
-
-                        if (! $wrapper.length) {
-                            return $();
-                        }
-
-                        let $loader = $wrapper.children('.lms-dt-loader');
-
-                        if (! $loader.length) {
-                            $loader = $('<div class="lms-dt-loader"><div><div></div><div></div><div></div><div></div></div></div>');
-                            $wrapper.append($loader);
-                        }
-
-                        return $loader;
-                    }
-
-                    function showLoader() {
-                        const $loader = loader();
-
-                        if ($loader.length) {
-                            clearTimeout($table.data('lms-loader-timer'));
-                            $loader.addClass('is-visible');
-                        }
-                    }
-
-                    function hideLoader(delay = 160) {
-                        const timer = setTimeout(function() {
-                            loader().removeClass('is-visible');
-                        }, delay);
-
-                        $table.data('lms-loader-timer', timer);
-                    }
-
-                    $table.on('search.dt order.dt page.dt length.dt', showLoader);
-                    $table.on('draw.dt', function() {
-                        hideLoader();
-                    });
-                    $table.on('processing.dt', function(event, settings, processing) {
-                        processing ? showLoader() : hideLoader(80);
-                    });
+                    // Custom skeleton loader removed per user request
                 };
 
                 $(document).on('init.dt', function(event, settings) {

@@ -361,7 +361,8 @@
 
             $('#departmentCoursesTable').DataTable({
 
-                responsive: true,
+                responsive: false,
+                scrollX: true,
                 autoWidth: false,
                 pageLength: 10,
 

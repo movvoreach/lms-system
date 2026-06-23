@@ -194,7 +194,8 @@
         $(document).ready(function() {
 
             $('#departmentTable').DataTable({
-                responsive: true,
+                responsive: false,
+                scrollX: true,
                 autoWidth: false,
                 pageLength: 10,
                 order: [

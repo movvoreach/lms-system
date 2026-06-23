@@ -114,7 +114,8 @@
     <script>
         $(document).ready(function() {
             $('#courseTable').DataTable({
-                responsive: true,
+                responsive: false,
+                scrollX: true,
                 autoWidth: false,
                 pageLength: 10,
                 order: [[0, 'asc']],

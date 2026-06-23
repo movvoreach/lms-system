@@ -149,7 +149,8 @@
 
                 // ✅ FIXED DATATABLE (SEARCH + RESPONSIVE + WIDTH)
                 $('#facultyTable').DataTable({
-                    responsive: true,
+                    responsive: false,
+                    scrollX: true,
                     autoWidth: false,
                     pageLength: 10,
                     order: [

@@ -822,7 +822,8 @@
 
             $('#courseStudentsTable').DataTable({
 
-                responsive: true,
+                responsive: false,
+                scrollX: true,
                 autoWidth: false,
                 paging: false,
 

@@ -74,7 +74,8 @@
     <script>
         $(function() {
             $('#studentEnrollmentTable').DataTable({
-                responsive: true,
+                responsive: false,
+                scrollX: true,
                 autoWidth: false,
                 order: [[0, 'asc']],
                 columnDefs: [{ targets: -1, orderable: false, searchable: false }]

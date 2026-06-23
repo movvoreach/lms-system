@@ -94,7 +94,7 @@
         </div>
     </div>
 
-    <div class="col-12">
+    <div class="col-12" id="group-summary">
         <div class="form-group">
             <label>សង្ខេប</label>
             <textarea name="summary" rows="2" class="form-control @error('summary') is-invalid @enderror">{{ old('summary', $lessonContent->summary ?? '') }}</textarea>
@@ -102,7 +102,7 @@
         </div>
     </div>
 
-    <div class="col-12">
+    <div class="col-12" id="group-body">
         <div class="form-group">
             <label>ខ្លឹមសារ</label>
             <textarea name="body" rows="8" class="form-control @error('body') is-invalid @enderror">{{ old('body', $lessonContent->body ?? '') }}</textarea>
@@ -110,7 +110,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4" id="group-external-url">
         <div class="form-group">
             <label>URL ខាងក្រៅ</label>
             <input type="url" name="external_url" class="form-control @error('external_url') is-invalid @enderror"
@@ -119,7 +119,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4" id="group-video-url">
         <div class="form-group">
             <label>URL វីដេអូ</label>
             <input type="url" name="video_url" class="form-control @error('video_url') is-invalid @enderror"
@@ -128,7 +128,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4" id="group-file-path">
         <div class="form-group">
             <label>ផ្លូវឯកសារ</label>
             <input type="text" name="file_path" class="form-control @error('file_path') is-invalid @enderror"
@@ -137,7 +137,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4" id="group-duration">
         <div class="form-group">
             <label>រយៈពេល (នាទី)</label>
             <input type="number" name="duration_minutes" min="0" class="form-control @error('duration_minutes') is-invalid @enderror"
@@ -146,7 +146,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4" id="group-max-score">
         <div class="form-group">
             <label>ពិន្ទុអតិបរមា</label>
             <input type="number" name="max_score" min="0" step="0.01" class="form-control @error('max_score') is-invalid @enderror"
@@ -155,7 +155,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4" id="group-passing-score">
         <div class="form-group">
             <label>ពិន្ទុឆ្លង</label>
             <input type="number" name="passing_score" min="0" step="0.01" class="form-control @error('passing_score') is-invalid @enderror"
@@ -218,3 +218,118 @@
     </div>
 
 </div>
+
+@push('scripts')
+    <!-- Load CKEditor 5 from CDN -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+    <script>
+        $(document).ready(function() {
+            let bodyEditor = null;
+            let summaryEditor = null;
+
+            // Initialize CKEditor 5 on body textarea
+            const bodyTextarea = document.querySelector('textarea[name="body"]');
+            if (bodyTextarea) {
+                ClassicEditor
+                    .create(bodyTextarea, {
+                        toolbar: {
+                            items: [
+                                'heading', '|',
+                                'bold', 'italic', '|',
+                                'bulletedList', 'numberedList', '|',
+                                'outdent', 'indent', '|',
+                                'blockQuote', 'insertTable', 'mediaEmbed', '|',
+                                'undo', 'redo'
+                            ]
+                        }
+                    })
+                    .then(editor => {
+                        bodyEditor = editor;
+                        editor.model.document.on('change:data', () => {
+                            bodyTextarea.value = editor.getData();
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error initializing CKEditor on body:', error);
+                    });
+            }
+
+            // Initialize CKEditor 5 on summary textarea
+            const summaryTextarea = document.querySelector('textarea[name="summary"]');
+            if (summaryTextarea) {
+                ClassicEditor
+                    .create(summaryTextarea, {
+                        toolbar: {
+                            items: [
+                                'bold', 'italic', '|',
+                                'bulletedList', 'numberedList', '|',
+                                'undo', 'redo'
+                            ]
+                        }
+                    })
+                    .then(editor => {
+                        summaryEditor = editor;
+                        editor.model.document.on('change:data', () => {
+                            summaryTextarea.value = editor.getData();
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error initializing CKEditor on summary:', error);
+                    });
+            }
+
+            // Dynamic show/hide of fields based on content type
+            const $contentTypeSelect = $('select[name="content_type"]');
+            
+            function toggleFields() {
+                const type = $contentTypeSelect.val();
+                
+                // Hide all optional fields first
+                $('#group-body, #group-external-url, #group-video-url, #group-file-path, #group-duration, #group-max-score, #group-passing-score').hide();
+                
+                // Show fields based on selected type
+                if (type === 'lesson' || type === 'page') {
+                    $('#group-body').show();
+                    $('#group-duration').show();
+                } else if (type === 'video') {
+                    $('#group-video-url').show();
+                    $('#group-duration').show();
+                } else if (type === 'file') {
+                    $('#group-file-path').show();
+                } else if (type === 'url') {
+                    $('#group-external-url').show();
+                } else if (type === 'assignment') {
+                    $('#group-body').show();
+                    $('#group-duration').show();
+                    $('#group-max-score').show();
+                    $('#group-passing-score').show();
+                } else if (type === 'quiz') {
+                    $('#group-duration').show();
+                    $('#group-max-score').show();
+                    $('#group-passing-score').show();
+                } else if (type === 'forum') {
+                    $('#group-body').show();
+                    $('#group-duration').show();
+                }
+            }
+
+            if ($contentTypeSelect.length) {
+                $contentTypeSelect.on('change', toggleFields);
+                toggleFields(); // Initial call
+            }
+        });
+    </script>
+    <style>
+        .ck-editor__editable_inline {
+            min-height: 250px;
+        }
+        /* Make summary editor shorter */
+        #group-summary .ck-editor__editable_inline {
+            min-height: 100px;
+        }
+        /* Style fixes for bootstrap 4 inside AdminLTE */
+        .ck-editor {
+            width: 100% !important;
+        }
+    </style>
+@endpush

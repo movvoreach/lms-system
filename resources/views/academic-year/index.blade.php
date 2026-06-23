@@ -131,7 +131,8 @@
     <script>
         $(document).ready(function() {
             $('#academicYearTable').DataTable({
-                responsive: true,
+                responsive: false,
+                scrollX: true,
                 autoWidth: false,
                 pageLength: 10,
                 order: [[0, 'asc']],

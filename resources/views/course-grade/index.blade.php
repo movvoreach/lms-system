@@ -380,6 +380,7 @@
             if (table.length && $.fn.DataTable && ! $.fn.DataTable.isDataTable(table[0])) {
                 table.DataTable({
                     responsive: false,
+                    scrollX: true,
                     autoWidth: false,
                     paging: false,
                     order: [[0, 'asc']],

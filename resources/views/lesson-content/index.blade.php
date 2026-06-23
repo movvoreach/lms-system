@@ -154,7 +154,8 @@
     <script>
         $(document).ready(function() {
             $('#lessonContentTable').DataTable({
-                responsive: true,
+                responsive: false,
+                scrollX: true,
                 autoWidth: false,
                 pageLength: 10,
                 order: [[1, 'asc'], [2, 'asc'], [3, 'asc']],
